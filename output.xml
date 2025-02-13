@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.0 (Python 3.11.3 on win32)" generated="2025-02-13T14:10:23.822413" rpa="false" schemaversion="5">
+<suite id="s1" name="Teste Aut Viacep" source="C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot">
+<test id="s1-t1" name="01 - Consultar um CEP Válido" line="38">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2025-02-13T14:10:25.150003" level="INFO">GET Request : url=https://viacep.com.br/ws/51111011/json/ 
+ path_url=/ws/51111011/json/ 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-02-13T14:10:25.150003" level="INFO">GET Response : url=https://viacep.com.br/ws/51111011/json/ 
+ status=200, reason=OK 
+ headers={'Server': 'nginx/1.22.0', 'Date': 'Thu, 13 Feb 2025 17:10:22 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Expires': 'Thu, 13 Feb 2025 18:10:22 GMT', 'Cache-Control': 'max-age=3600, public', 'Pragma': 'public', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET', 'Access-Control-Allow-Headers': 'Content-Type, X-Request-With, X-Requested-By', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Max-Age': '86400'} 
+ body={
+  "cep": "51111-011",
+  "logradouro": "Avenida Conselheiro Aguiar",
+  "complemento": "de 1367 a 2255 - lado ímpar",
+  "unidade": "",
+  "bairro": "Boa Viagem",
+  "localidade": "Recife",
+  "uf": "PE",
+  "estado": "Pernambuco",
+  "regiao": "Nordeste",
+  "ibge": "2611606",
+  "gia": "",
+  "ddd": "81",
+  "siafi": "2531"
+} 
+ </msg>
+<msg time="2025-02-13T14:10:25.150003" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>https://viacep.com.br/ws/${CEP_VÁLIDO}/json/</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2025-02-13T14:10:24.052296" elapsed="1.097707"/>
+</kw>
+<kw name="Request Should Be Successful" owner="RequestsLibrary">
+<arg>${response}</arg>
+<doc>Fails if response status code is a client or server error (4xx, 5xx).</doc>
+<status status="PASS" start="2025-02-13T14:10:25.150003" elapsed="0.000000"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-02-13T14:10:25.150003" level="INFO">${json_data} = {'cep': '51111-011', 'logradouro': 'Avenida Conselheiro Aguiar', 'complemento': 'de 1367 a 2255 - lado ímpar', 'unidade': '', 'bairro': 'Boa Viagem', 'localidade': 'Recife', 'uf': 'PE', 'estado': 'Per...</msg>
+<var>${json_data}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-02-13T14:10:25.150003" elapsed="0.000000"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-02-13T14:10:25.150003" level="INFO">${json_string} = {
+    "cep": "51111-011",
+    "logradouro": "Avenida Conselheiro Aguiar",
+    "complemento": "de 1367 a 2255 - lado \u00edmpar",
+    "unidade": "",
+    "bairro": "Boa Viagem",
+    "localidade": "Recif...</msg>
+<var>${json_string}</var>
+<arg>json.dumps(${json_data}, indent=4)</arg>
+<arg>json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-02-13T14:10:25.150003" elapsed="0.000000"/>
+</kw>
+<kw name="Create File" owner="OperatingSystem">
+<msg time="2025-02-13T14:10:25.150003" level="INFO" html="true">Created file '&lt;a href="file://C:\Teste_Aut_ViaCEP\dados_cep.json"&gt;C:\Teste_Aut_ViaCEP\dados_cep.json&lt;/a&gt;'.</msg>
+<arg>${JSON_FILE}</arg>
+<arg>${json_string}</arg>
+<doc>Creates a file with the given content and encoding.</doc>
+<status status="PASS" start="2025-02-13T14:10:25.150003" elapsed="0.000000"/>
+</kw>
+<kw name="File Should Exist" owner="OperatingSystem">
+<msg time="2025-02-13T14:10:25.150003" level="INFO" html="true">File '&lt;a href="file://C:\Teste_Aut_ViaCEP\dados_cep.json"&gt;C:\Teste_Aut_ViaCEP\dados_cep.json&lt;/a&gt;' exists.</msg>
+<arg>${JSON_FILE}</arg>
+<doc>Fails unless the given ``path`` points to an existing file.</doc>
+<status status="PASS" start="2025-02-13T14:10:25.150003" elapsed="0.000000"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>JSON salvo em: ${JSON_FILE}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="PASS" start="2025-02-13T14:10:25.150003" elapsed="0.000000"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<msg time="2025-02-13T14:10:25.150003" level="FAIL">{ != {
+    "cep": "51111-011",
+    "logradouro": "Avenida Conselheiro Aguiar",
+    "complemento": "de 1367 a 2255 - lado \u00edmpar",
+    "unidade": "",
+    "bairro": "Boa Viagem",
+    "localidade": "Recife",
+    "uf": "PE",
+    "estado": "Pernambuco",
+    "regiao": "Nordeste",
+    "ibge": "2611606",
+    "gia": "",
+    "ddd": "81",
+    "siafi": "2531"
+}</msg>
+<var>${result}</var>
+<arg>${Dados_corretos_51111011}</arg>
+<arg>${json_string}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="FAIL" start="2025-02-13T14:10:25.150003" elapsed="0.000000">{ != {
+    "cep": "51111-011",
+    "logradouro": "Avenida Conselheiro Aguiar",
+    "complemento": "de 1367 a 2255 - lado \u00edmpar",
+    "unidade": "",
+    "bairro": "Boa Viagem",
+    "localidade": "Recife",
+    "uf": "PE",
+    "estado": "Pernambuco",
+    "regiao": "Nordeste",
+    "ibge": "2611606",
+    "gia": "",
+    "ddd": "81",
+    "siafi": "2531"
+}</status>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>'${result[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>TESTE NOK, Os dados não são iguais</arg>
+<arg>level=ERROR</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.161095" elapsed="0.000000"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>'${result[0]}' == 'PASS'</arg>
+<arg>Log</arg>
+<arg>TESTE OK, Os dados estão corretos</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.161095" elapsed="0.000000"/>
+</kw>
+<status status="FAIL" start="2025-02-13T14:10:24.052296" elapsed="1.108799">{ != {
+    "cep": "51111-011",
+    "logradouro": "Avenida Conselheiro Aguiar",
+    "complemento": "de 1367 a 2255 - lado \u00edmpar",
+    "unidade": "",
+    "bairro": "Boa Viagem",
+    "localidade": "Recife",
+    "uf": "PE",
+    "estado": "Pernambuco",
+    "regiao": "Nordeste",
+    "ibge": "2611606",
+    "gia": "",
+    "ddd": "81",
+    "siafi": "2531"
+}</status>
+</test>
+<test id="s1-t2" name="02 - Consultar um CEP Inválido" line="50">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2025-02-13T14:10:25.881817" level="INFO">GET Request : url=https://viacep.com.br/ws/00100101/json/ 
+ path_url=/ws/00100101/json/ 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-02-13T14:10:25.881817" level="INFO">GET Response : url=https://viacep.com.br/ws/00100101/json/ 
+ status=200, reason=OK 
+ headers={'Server': 'nginx/1.22.0', 'Date': 'Thu, 13 Feb 2025 17:10:23 GMT', 'Content-Type': 'application/json; charset=utf-8', 'Transfer-Encoding': 'chunked', 'Connection': 'keep-alive', 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Methods': 'GET', 'Access-Control-Allow-Headers': 'Content-Type, X-Request-With, X-Requested-By', 'Access-Control-Allow-Credentials': 'true', 'Access-Control-Max-Age': '86400', 'Strict-Transport-Security': 'max-age=63072000'} 
+ body={
+  "erro": "true"
+} 
+ </msg>
+<msg time="2025-02-13T14:10:25.881817" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>https://viacep.com.br/ws/${CEP_INVÁLIDO}/json/</arg>
+<doc>Sends a GET request.</doc>
+<status status="PASS" start="2025-02-13T14:10:25.162169" elapsed="0.719648"/>
+</kw>
+<kw name="Should Not Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-02-13T14:10:25.881817" level="INFO">Argument types are:
+&lt;class 'int'&gt;
+&lt;class 'str'&gt;</msg>
+<msg time="2025-02-13T14:10:25.881817" level="FAIL">200.0 == 200.0</msg>
+<var>${result}</var>
+<arg>${response.status_code}</arg>
+<arg>200</arg>
+<doc>Fails if objects are equal after converting them to real numbers.</doc>
+<status status="FAIL" start="2025-02-13T14:10:25.881817" elapsed="0.000000">200.0 == 200.0</status>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>'${result[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>TESTE NOK, Status Code = 200</arg>
+<arg>level=ERROR</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.890821" elapsed="0.000000"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>'${result[0]}' == 'PASS'</arg>
+<arg>Log</arg>
+<arg>TESTE OK, Status Code != 200</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.890821" elapsed="0.000000"/>
+</kw>
+<kw name="GET" owner="RequestsLibrary">
+<var>${response}</var>
+<arg>https://viacep.com.br/ws/${CEP_INVÁLIDO}/json/</arg>
+<doc>Sends a GET request.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.890821" elapsed="0.000000"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<var>${json_data}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.890821" elapsed="0.000000"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${json_string}</var>
+<arg>json.dumps(${json_data}, indent=4)</arg>
+<arg>json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.890821" elapsed="0.000000"/>
+</kw>
+<kw name="Create File" owner="OperatingSystem">
+<arg>${JSON_FILE}</arg>
+<arg>${json_string}</arg>
+<doc>Creates a file with the given content and encoding.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.890821" elapsed="0.000000"/>
+</kw>
+<kw name="File Should Exist" owner="OperatingSystem">
+<arg>${JSON_FILE}</arg>
+<doc>Fails unless the given ``path`` points to an existing file.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.891869" elapsed="0.000000"/>
+</kw>
+<kw name="Log To Console" owner="BuiltIn">
+<arg>JSON salvo em: ${JSON_FILE}</arg>
+<doc>Logs the given message to the console.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.891869" elapsed="0.000000"/>
+</kw>
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<var>${result}</var>
+<arg>Should COntain</arg>
+<arg>${json_string}</arg>
+<arg>erro</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.891869" elapsed="0.000000"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>'${result[0]}' == 'FAIL'</arg>
+<arg>Log</arg>
+<arg>TESTE NOK, No Json não há erro</arg>
+<arg>level=ERROR</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.891869" elapsed="0.000000"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>'${result[0]}' == 'PASS'</arg>
+<arg>Log</arg>
+<arg>TESTE OK, No Json há erro</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-02-13T14:10:25.891869" elapsed="0.000000"/>
+</kw>
+<status status="FAIL" start="2025-02-13T14:10:25.162169" elapsed="0.730735">200.0 == 200.0</status>
+</test>
+<test id="s1-t3" name="05 - Consultar um CEP Incompleto" line="65">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2025-02-13T14:10:26.434897" level="INFO">GET Request : url=https://viacep.com.br/ws/111/json/ 
+ path_url=/ws/111/json/ 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-02-13T14:10:26.434897" level="INFO">GET Response : url=https://viacep.com.br/ws/111/json/ 
+ status=400, reason=Bad Request 
+ headers={'Server': 'nginx/1.22.0', 'Date': 'Thu, 13 Feb 2025 17:10:24 GMT', 'Content-Type': 'text/html; charset=utf-8', 'Content-Length': '494', 'Connection': 'close', 'ETag': '"6242f812-1ee"', 'Strict-Transport-Security': 'max-age=63072000'} 
+ body=&lt;!DOCTYPE HTML&gt;
+&lt;html lang="pt-br"&gt;
+
+&lt;head&gt;
+  &lt;title&gt;ViaCEP 400&lt;/title&gt;
+  &lt;meta charset="utf-8" /&gt;
+  &lt;style type="text/css"&gt;
+      h1 {
+          color: #555;
+          text-align: center;
+          font-size: 4em;
+      }
+      h2, h3 {
+          color: #666;
+          text-align: center;
+          font-size: 3em;
+      }
+      h3 {
+          font-size: 1.5em;
+      }
+  &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;Http 400&lt;/h1&gt;
+    &lt;h3&gt;Verifique a URL&lt;/h3&gt;
+    &lt;h3&gt;{Bad Request}&lt;/h3&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+ 
+ </msg>
+<msg time="2025-02-13T14:10:26.434897" level="FAIL">HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/111/json/</msg>
+<arg>https://viacep.com.br/ws/${CEP_INCOMPLETO}/json/</arg>
+<doc>Sends a GET request.</doc>
+<status status="FAIL" start="2025-02-13T14:10:25.893909" elapsed="0.544966">HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/111/json/</status>
+</kw>
+<msg time="2025-02-13T14:10:26.438875" level="INFO">${response} = ('FAIL', 'HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/111/json/')</msg>
+<var>${response}</var>
+<arg>Get</arg>
+<arg>https://viacep.com.br/ws/${CEP_INCOMPLETO}/json/</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2025-02-13T14:10:25.892904" elapsed="0.545971"/>
+</kw>
+<kw name="Should Not Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-02-13T14:10:26.438875" level="FAIL">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</msg>
+<var>${responset}</var>
+<arg>${response.status_code}</arg>
+<arg>400</arg>
+<doc>Fails if objects are equal after converting them to real numbers.</doc>
+<status status="FAIL" start="2025-02-13T14:10:26.438875" elapsed="0.000000">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</status>
+</kw>
+<status status="FAIL" start="2025-02-13T14:10:25.892904" elapsed="0.545971">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</status>
+</test>
+<test id="s1-t4" name="06 - Consultar um CEP Incrreto" line="70">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2025-02-13T14:10:26.900111" level="INFO">GET Request : url=https://viacep.com.br/ws/8888888888888888888888888888888888888888888/json/ 
+ path_url=/ws/8888888888888888888888888888888888888888888/json/ 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-02-13T14:10:26.900111" level="INFO">GET Response : url=https://viacep.com.br/ws/8888888888888888888888888888888888888888888/json/ 
+ status=400, reason=Bad Request 
+ headers={'Server': 'nginx/1.22.0', 'Date': 'Thu, 13 Feb 2025 17:10:24 GMT', 'Content-Type': 'text/html; charset=utf-8', 'Content-Length': '494', 'Connection': 'close', 'ETag': '"6242f812-1ee"', 'Strict-Transport-Security': 'max-age=63072000'} 
+ body=&lt;!DOCTYPE HTML&gt;
+&lt;html lang="pt-br"&gt;
+
+&lt;head&gt;
+  &lt;title&gt;ViaCEP 400&lt;/title&gt;
+  &lt;meta charset="utf-8" /&gt;
+  &lt;style type="text/css"&gt;
+      h1 {
+          color: #555;
+          text-align: center;
+          font-size: 4em;
+      }
+      h2, h3 {
+          color: #666;
+          text-align: center;
+          font-size: 3em;
+      }
+      h3 {
+          font-size: 1.5em;
+      }
+  &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;Http 400&lt;/h1&gt;
+    &lt;h3&gt;Verifique a URL&lt;/h3&gt;
+    &lt;h3&gt;{Bad Request}&lt;/h3&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+ 
+ </msg>
+<msg time="2025-02-13T14:10:26.900111" level="FAIL">HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/8888888888888888888888888888888888888888888/json/</msg>
+<arg>https://viacep.com.br/ws/${CEP_INCORRETO}/json/</arg>
+<doc>Sends a GET request.</doc>
+<status status="FAIL" start="2025-02-13T14:10:26.438875" elapsed="0.461236">HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/8888888888888888888888888888888888888888888/json/</status>
+</kw>
+<msg time="2025-02-13T14:10:26.900111" level="INFO">${response} = ('FAIL', 'HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/8888888888888888888888888888888888888888888/json/')</msg>
+<var>${response}</var>
+<arg>Get</arg>
+<arg>https://viacep.com.br/ws/${CEP_INCORRETO}/json/</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2025-02-13T14:10:26.438875" elapsed="0.461236"/>
+</kw>
+<kw name="Should Not Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-02-13T14:10:26.900111" level="FAIL">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</msg>
+<var>${response}</var>
+<arg>${response.status_code}</arg>
+<arg>400</arg>
+<doc>Fails if objects are equal after converting them to real numbers.</doc>
+<status status="FAIL" start="2025-02-13T14:10:26.900111" elapsed="0.000000">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</status>
+</kw>
+<status status="FAIL" start="2025-02-13T14:10:26.438875" elapsed="0.461236">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</status>
+</test>
+<test id="s1-t5" name="07 - Consultar um CEP Especial" line="75">
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="GET" owner="RequestsLibrary">
+<msg time="2025-02-13T14:10:27.332430" level="INFO">GET Request : url=https://viacep.com.br/ws/1111321@/json/ 
+ path_url=/ws/1111321@/json/ 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive'} 
+ body=None 
+ </msg>
+<msg time="2025-02-13T14:10:27.332430" level="INFO">GET Response : url=https://viacep.com.br/ws/1111321@/json/ 
+ status=400, reason=Bad Request 
+ headers={'Server': 'nginx/1.22.0', 'Date': 'Thu, 13 Feb 2025 17:10:25 GMT', 'Content-Type': 'text/html; charset=utf-8', 'Content-Length': '494', 'Connection': 'close', 'ETag': '"6242f812-1ee"', 'Strict-Transport-Security': 'max-age=63072000'} 
+ body=&lt;!DOCTYPE HTML&gt;
+&lt;html lang="pt-br"&gt;
+
+&lt;head&gt;
+  &lt;title&gt;ViaCEP 400&lt;/title&gt;
+  &lt;meta charset="utf-8" /&gt;
+  &lt;style type="text/css"&gt;
+      h1 {
+          color: #555;
+          text-align: center;
+          font-size: 4em;
+      }
+      h2, h3 {
+          color: #666;
+          text-align: center;
+          font-size: 3em;
+      }
+      h3 {
+          font-size: 1.5em;
+      }
+  &lt;/style&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    &lt;h1&gt;Http 400&lt;/h1&gt;
+    &lt;h3&gt;Verifique a URL&lt;/h3&gt;
+    &lt;h3&gt;{Bad Request}&lt;/h3&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+ 
+ </msg>
+<msg time="2025-02-13T14:10:27.332430" level="FAIL">HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/1111321@/json/</msg>
+<arg>https://viacep.com.br/ws/${CEP_SPECIAL}/json/</arg>
+<doc>Sends a GET request.</doc>
+<status status="FAIL" start="2025-02-13T14:10:26.914705" elapsed="0.417725">HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/1111321@/json/</status>
+</kw>
+<msg time="2025-02-13T14:10:27.332430" level="INFO">${response} = ('FAIL', 'HTTPError: 400 Client Error: Bad Request for url: https://viacep.com.br/ws/1111321@/json/')</msg>
+<var>${response}</var>
+<arg>Get</arg>
+<arg>https://viacep.com.br/ws/${CEP_SPECIAL}/json/</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2025-02-13T14:10:26.914705" elapsed="0.417725"/>
+</kw>
+<kw name="Should Not Be Equal As Numbers" owner="BuiltIn">
+<msg time="2025-02-13T14:10:27.332430" level="FAIL">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</msg>
+<var>${response}</var>
+<arg>${response.status_code}</arg>
+<arg>400</arg>
+<doc>Fails if objects are equal after converting them to real numbers.</doc>
+<status status="FAIL" start="2025-02-13T14:10:27.332430" elapsed="0.000000">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</status>
+</kw>
+<status status="FAIL" start="2025-02-13T14:10:26.900111" elapsed="0.432319">Resolving variable '${response.status_code}' failed: AttributeError: 'tuple' object has no attribute 'status_code'</status>
+</test>
+<status status="FAIL" start="2025-02-13T14:10:23.822413" elapsed="3.510017"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="5" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="5" skip="0" id="s1" name="Teste Aut Viacep">Teste Aut Viacep</stat>
+</suite>
+</statistics>
+<errors>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 18: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 19: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 20: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 21: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 22: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 23: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 24: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 25: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 26: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 27: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 28: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 29: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 30: Setting variable '' failed: Invalid variable name ''.</msg>
+<msg time="2025-02-13T14:10:23.822413" level="ERROR">Error in file 'C:\Teste_Aut_ViaCEP\teste_aut_viacep.robot' on line 32: Setting variable '}' failed: Invalid variable name '}'.</msg>
+</errors>
+</robot>
